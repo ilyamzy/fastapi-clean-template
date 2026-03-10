@@ -1,0 +1,6 @@
+pydantic-settings
+firebase-admin
+sqlalchemy
+alembic
+fastapi
+aioboto3
