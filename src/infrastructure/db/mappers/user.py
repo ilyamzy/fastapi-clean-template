@@ -16,3 +16,10 @@ class UserMapper(BaseMapper):
         return UserModel(
             id=domain.id
         )
+
+    @staticmethod
+    def update_model(
+        model: UserModel,
+        domain: User
+    ) -> None:
+        pass

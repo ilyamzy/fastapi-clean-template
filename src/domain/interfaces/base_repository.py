@@ -28,8 +28,7 @@ class IBaseRepository(Generic[T], ABC):
     @abstractmethod
     async def update(
         self,
-        id: Any,
-        **payload
+        domain_entity: T
     ) -> Optional[T]:
         raise NotImplementedError
     
