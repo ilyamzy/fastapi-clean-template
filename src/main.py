@@ -1,3 +1,5 @@
+import os
+import json
 import logging
 import firebase_admin
 
@@ -29,8 +31,12 @@ logger.info("Logging is configured")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     if not firebase_admin._apps:
-        cred = credentials.Certificate(settings.FIREBASE_CREDENTIALS_PATH)
-        firebase_admin.initialize_app(cred)
+        firebase_json_str = os.getenv('FIREBASE')
+        firebase_config = json.loads(firebase_json_str)
+        firebase_config["private_key"] = firebase_config["private_key"].replace("\\n", "\n")
+    
+    cred = credentials.Certificate(firebase_config)
+    firebase_admin.initialize_app(cred)
     yield
     
     await engine.dispose()

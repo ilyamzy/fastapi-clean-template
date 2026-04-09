@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DB_URL: str
-    FIREBASE_CREDENTIALS_PATH: str
+    FIREBASE: str
     BASE_URL: str
     S3_ENDPOINT: str
     S3_BUCKET: str
