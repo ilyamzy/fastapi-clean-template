@@ -6,3 +6,6 @@ from .base import (
 from .token import (
     InvalidToken
 )
+from .image import (
+    ImageNotFoundException
+)

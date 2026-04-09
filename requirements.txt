@@ -4,3 +4,6 @@ sqlalchemy
 alembic
 fastapi
 aioboto3
+diskcache
+pillow
+python-multipart

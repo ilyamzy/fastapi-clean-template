@@ -17,8 +17,13 @@ from infrastructure.db.unit_of_work import SqlAlchemyUnitOfWork
 from infrastructure.services import (
     FirebaseAuthService
 )
+from infrastructure.image_storage import (
+    S3Storage,
+    CachedStorage
+)
 from application.use_cases import (
-    AuthUseCases
+    AuthUseCases,
+    ImageUseCases
 )
 from application.exceptions import (
     InvalidToken
@@ -28,7 +33,8 @@ from domain.dto import (
 )
 from domain.interfaces import (
     IUnitOfWork,
-    IAuthService
+    IAuthService,
+    IImageStorage
 )
 
 
@@ -59,3 +65,37 @@ async def get_current_user(
         return await auth_use_cases.check_token(check_token_dto)
     except InvalidToken:
         raise HTTPException(status_code=401)
+
+async def get_s3_client() -> AsyncGenerator:
+    async with session.client(
+        "s3",
+        endpoint_url=settings.S3_ENDPOINT,
+        aws_access_key_id=settings.S3_ACCESS_KEY,
+        aws_secret_access_key=settings.S3_SECRET_KEY,
+        region_name=settings.S3_REGION
+    ) as client:
+        yield client
+
+async def get_image_storage(
+    s3_client = Depends(get_s3_client)
+) -> IImageStorage:
+    return S3Storage(
+        s3_client=s3_client,
+        bucket=settings.S3_BUCKET,
+        base_url=settings.BASE_URL
+    )
+
+async def get_cached_image_storage(
+    base_storage: IImageStorage = Depends(get_image_storage)
+) -> IImageStorage:
+    return CachedStorage(
+        base_storage=base_storage,
+        cache_dir=settings.CACHE_DIR
+    )
+
+async def get_image_use_cases(
+    storage: IImageStorage = Depends(get_cached_image_storage)
+) -> ImageUseCases:
+    return ImageUseCases(
+        image_storage=storage
+    )

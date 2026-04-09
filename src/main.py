@@ -6,7 +6,8 @@ from fastapi import FastAPI
 from firebase_admin import credentials
 
 from presentation.api import (
-    auth_router
+    auth_router,
+    image_router
 )
 from infrastructure.config import settings
 from presentation.dependencies import engine
@@ -36,3 +37,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+# app.include_router(auth_router)
+app.include(image_router)
