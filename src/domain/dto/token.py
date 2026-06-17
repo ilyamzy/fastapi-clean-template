@@ -1,6 +1,5 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
 
-@dataclass
-class CheckTokenDTO:
+class CheckTokenDTO(BaseModel):
     token: str
