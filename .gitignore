@@ -5,3 +5,4 @@ __pycache__
 firebase_creds.json
 auth.bash
 anonymous_auth.bash
+future_adds.txt
