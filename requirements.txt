@@ -8,3 +8,5 @@ diskcache
 pillow
 python-multipart
 uvicorn
+asyncpg
+
