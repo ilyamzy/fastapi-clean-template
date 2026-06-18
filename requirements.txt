@@ -7,3 +7,4 @@ aioboto3
 diskcache
 pillow
 python-multipart
+uvicorn
